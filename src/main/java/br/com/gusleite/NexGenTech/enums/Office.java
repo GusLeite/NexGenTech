@@ -1,4 +1,4 @@
-package br.com.gusleite.NexGenTech.entities.enums;
+package br.com.gusleite.NexGenTech.enums;
 
 public enum Office {
     TRAINEE,

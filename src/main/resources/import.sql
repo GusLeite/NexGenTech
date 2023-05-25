@@ -1,0 +1,10 @@
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('TRAINEE',2350.0,'5511941789433','52657668803','gustavofictionalemail@hotmail.com','Gustavo Leite da Silva');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('DEV_JUNIOR',4500.0,'5511972543322','56723304985','tiagofictionalemail@hotmail.com','Tiago Silva Medeiro');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('DEV_SENIOR',15000.0,'5588938545321','4356752312','gabriellafictionalemail@hotmail.com','Gabriela Pinheiros da Silva');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('SYSTEM_ANALYST',5000.0,'5545837215653','83263294013','Vanessafictionalemail@hotmail.com','Vanessa Silva Costas');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('DEV_PLENO',7500.0,'5508832716722','82735510982','liliafictionalemail@hotmail.com','Lilia Pacheco Leite');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('DATA_SCIENTIST',8000.0,'5531827162951','32135546757','juliocezar fictionalemail@hotmail.com','Julio Cezar Costas');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('PRODUCT_OWNER',20000.0,'55139261894377','62738449389','guilhermefictionalemail@hotmail.com','Guilherme Fontes Leal');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('SCRUM_MASTER',15000.0,'5531827167833','61789936781','gabrielfictionalemail@hotmail.com','Gabriel Santos da Silva');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('MANAGER',20000.0,'55128372891993','83749901863','annefictionalemail@hotmail.com','Anne Rezenda da Silva');
+INSERT INTO employee (office,salary,telephone,cpf,email,name) VALUES ('DEV_JUNIOR',5000.0,'5511983718344','82738894813','vitorfictionalemail@hotmail.com','Vitor Cortez Guimaraes');
