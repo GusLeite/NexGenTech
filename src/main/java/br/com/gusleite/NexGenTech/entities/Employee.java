@@ -1,8 +1,9 @@
 package br.com.gusleite.NexGenTech.entities;
 
+import br.com.gusleite.NexGenTech.dtos.RegisterEmployeeDataDTO;
+import br.com.gusleite.NexGenTech.dtos.UpdateEmployeeRegisterDTO;
 import br.com.gusleite.NexGenTech.enums.Office;
-import br.com.gusleite.NexGenTech.services.EmployeeService;
-import br.com.gusleite.NexGenTech.services.ValidateService;
+import br.com.gusleite.NexGenTech.services.ValidatePromotionService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,11 +27,39 @@ public class Employee {
     private BigDecimal salary;
     @Enumerated(EnumType.STRING)
     private Office office;
-    private LocalDate lastPromotionDate;
-//    private HomeAddress homeAddres;s;
+    @Embedded
+    private Address address;
+    private LocalDate dateLastPromotion;
+
+    public Employee(RegisterEmployeeDataDTO data){
+        this.name = data.getName();
+        this.cpf = data.getCpf();
+        this.email = data.getEmail();
+        this.telephone = data.getTelephone();
+        this.salary = data.getSalary();
+        this.office = data.getOffice();
+        this.address = new Address(data.getAddress());
+        this.dateLastPromotion = data.getLastPromotionDate();
+    }
+
 
     public void promote() throws Exception {
-        new ValidateService().validate(this);
+        new ValidatePromotionService().validate(this);
         this.office = this.office.NextOffice();
+    }
+
+    public void updateData(UpdateEmployeeRegisterDTO data) {
+        if(data.getName() != null) {
+            this.name = data.getName();
+        }
+        if(data.getTelephone() != null) {
+            this.telephone = data.getTelephone();
+        }
+        if(data.getAddressDataDTO() != null) {
+            address.updateAddress(data.getAddressDataDTO());
+        }
+        if(data.getName() != null) {
+            this.name = data.getName();
+        }
     }
 }
