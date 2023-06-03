@@ -3,6 +3,7 @@ package br.com.gusleite.NexGenTech.entities;
 import br.com.gusleite.NexGenTech.dtos.RegisterEmployeeDataDTO;
 import br.com.gusleite.NexGenTech.dtos.UpdateEmployeeRegisterDTO;
 import br.com.gusleite.NexGenTech.enums.Office;
+import br.com.gusleite.NexGenTech.exceptions.PromotionValidationFailAttemptException;
 import br.com.gusleite.NexGenTech.services.ValidatePromotionService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,9 +44,10 @@ public class Employee {
     }
 
 
-    public void promote() throws Exception {
+    public void promote() throws PromotionValidationFailAttemptException {
         new ValidatePromotionService().validate(this);
         this.office = this.office.NextOffice();
+        this.dateLastPromotion = LocalDate.now();
     }
 
     public void updateData(UpdateEmployeeRegisterDTO data) {
