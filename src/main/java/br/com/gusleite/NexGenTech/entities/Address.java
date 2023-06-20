@@ -1,10 +1,9 @@
 package br.com.gusleite.NexGenTech.entities;
 
-import br.com.gusleite.NexGenTech.dtos.AddressDataDTO;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import br.com.gusleite.NexGenTech.datamodel.AddressDataModel;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,21 +13,16 @@ import lombok.NoArgsConstructor;
 @Data
 @Embeddable
 public class Address {
-    @NotBlank
     private String street;
-    @NotNull
     private Integer number;
-    @NotBlank
     private String neighborhood;
-    @NotBlank
     private String city;
-    @NotBlank
-    private String federativeUnit;
-    @NotBlank
+    @Enumerated(EnumType.STRING)
+    private FederativeUnit federativeUnit;
     private String cep;
 
 
-    public Address(AddressDataDTO address) {
+    public Address(AddressDataModel address) {
         this.cep = address.getCep();
         this.city = address.getCity();
         this.federativeUnit = address.getFederativeUnit();
@@ -37,7 +31,7 @@ public class Address {
         this.street = address.getStreet();
     }
 
-    public void updateAddress(AddressDataDTO data) {
+    public void updateAddress(AddressDataModel data) {
         if(data.getCep() != null){
             this.cep = data.getCep();
         }

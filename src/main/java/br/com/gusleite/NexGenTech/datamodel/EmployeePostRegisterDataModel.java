@@ -1,7 +1,8 @@
-package br.com.gusleite.NexGenTech.dtos;
-
+package br.com.gusleite.NexGenTech.datamodel;
 import br.com.gusleite.NexGenTech.enums.Office;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class RegisterEmployeeDataDTO {
+public class EmployeePostRegisterDataModel {
     @NotEmpty
     private String name;
     @NotEmpty
@@ -27,7 +28,7 @@ public class RegisterEmployeeDataDTO {
     @NotNull
     private Office office;
 
-    private AddressDataDTO address;
+    private AddressDataModel address;
     @NotNull
     private LocalDate lastPromotionDate;
 

@@ -10,6 +10,6 @@ public class ValidatePromotionService implements ValidationsPromoteService{
         if(employee.getOffice() == Office.PRODUCT_OWNER){
             throw new PromotionValidationFailAttemptException("Managers can't be promoted");
         }
-        new ValidatePromotionByDate().validate(employee);
+        new ValidatePromotionByDateService().validate(employee);
     }
 }

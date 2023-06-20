@@ -1,4 +1,5 @@
-package br.com.gusleite.NexGenTech.dtos;
+package br.com.gusleite.NexGenTech.datamodel;
+
 
 import br.com.gusleite.NexGenTech.entities.Employee;
 import br.com.gusleite.NexGenTech.enums.Office;
@@ -9,14 +10,14 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @Data
-public class EmployeeListDTO {
+public class EmployeeGetListDataModel {
     private Long id;
     private String name;
     private String email;
     private Office office;
     private LocalDate lastPromotionDate;
 
-    public EmployeeListDTO(Employee employee){
+    public EmployeeGetListDataModel(Employee employee){
         this.id = employee.getId();
         this.name = employee.getName();
         this.email = employee.getEmail();

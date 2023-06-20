@@ -1,11 +1,11 @@
-package br.com.gusleite.NexGenTech.dtos;
-
+package br.com.gusleite.NexGenTech.datamodel;
 import br.com.gusleite.NexGenTech.entities.Address;
 import br.com.gusleite.NexGenTech.entities.Employee;
 import br.com.gusleite.NexGenTech.enums.Office;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class DetailEmployeeDataDTO {
+public class EmployeeGetDetailDataModel {
 
         private Long id;
         private String name;
@@ -25,7 +25,7 @@ public class DetailEmployeeDataDTO {
         private LocalDate lastPromotionDate;
 
 
-    public DetailEmployeeDataDTO(Employee employee) {
+    public EmployeeGetDetailDataModel(Employee employee) {
         this.id = employee.getId();
         this.name = employee.getName();
         this.cpf = employee.getCpf();

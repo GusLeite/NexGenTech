@@ -1,20 +1,23 @@
-package br.com.gusleite.NexGenTech.dtos;
+package br.com.gusleite.NexGenTech.datamodel;
 
-import br.com.gusleite.NexGenTech.entities.Employee;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class UpdateEmployeeRegisterDTO {
+@Getter
+@Setter
+public class EmployeePutUpdateDataModel {
 
     @NotNull
     private Long id;
     private String name;
     private String telephone;
-    private AddressDataDTO addressDataDTO;
+    private AddressDataModel addressDataModel;
+
+
 
 }

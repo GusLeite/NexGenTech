@@ -1,13 +1,13 @@
 package br.com.gusleite.NexGenTech.services;
 
+
 import br.com.gusleite.NexGenTech.entities.Employee;
-import br.com.gusleite.NexGenTech.enums.Office;
 import br.com.gusleite.NexGenTech.exceptions.PromotionValidationFailAttemptException;
 
 import java.time.LocalDate;
 import java.time.Period;
 
-public class ValidatePromotionByDate implements ValidationsPromoteService{
+public class ValidatePromotionByDateService implements ValidationsPromoteService{
     @Override
     public void validate(Employee employee) throws PromotionValidationFailAttemptException {
         if(Period.between(employee.getDateLastPromotion(),LocalDate.now()).getMonths() < 6){
