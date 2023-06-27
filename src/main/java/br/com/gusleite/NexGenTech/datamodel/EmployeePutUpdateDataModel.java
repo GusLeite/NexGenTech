@@ -1,15 +1,13 @@
 package br.com.gusleite.NexGenTech.datamodel;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class EmployeePutUpdateDataModel {
 
     @NotNull

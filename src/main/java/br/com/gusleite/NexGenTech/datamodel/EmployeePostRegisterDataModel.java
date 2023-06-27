@@ -3,20 +3,22 @@ import br.com.gusleite.NexGenTech.enums.Office;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CPF;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class EmployeePostRegisterDataModel {
     @NotEmpty
     private String name;
     @NotEmpty
-    @CPF
     private String cpf;
     @NotEmpty
     @Email

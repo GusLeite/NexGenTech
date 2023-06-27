@@ -1,0 +1,14 @@
+version: '4.19.0'
+services:
+  db:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+    - "3307:3306"
+    volumes:
+    - gusleite_nexgentech_data:/var/lib/mysql
+
+volumes:
+  gusleite_nexgentech_data:

@@ -9,6 +9,8 @@ import br.com.gusleite.NexGenTech.exceptions.EmployeeNotFoundException;
 import br.com.gusleite.NexGenTech.repositories.EmployeeRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,7 +26,7 @@ public class EmployeeService {
     }
 
     public Employee findEmployeeByName(String name){
-        return employeeRepository.findEmployeeByName(name);
+        return employeeRepository.findEmployeeByName(name).orElseThrow(() -> new EmployeeNotFoundException("Employee Not Found!"));
     }
 
     public List<Employee> listEmployeeByOffice(Office office){
@@ -43,9 +45,8 @@ public class EmployeeService {
         return employeeRepository.findEmployeeBySalaryIsGreaterThanEqual(salary);
     }
 
-
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    public Page<Employee> listAll(Pageable pageable) {
+        return employeeRepository.findAll(pageable);
     }
 
     public Employee register(@Valid EmployeePostRegisterDataModel data) {
@@ -58,6 +59,7 @@ public class EmployeeService {
     }
 
     public void updateData(EmployeePutUpdateDataModel data) {
+
     }
 }
 

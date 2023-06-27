@@ -13,14 +13,13 @@ import br.com.gusleite.NexGenTech.util.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
-import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -34,20 +33,20 @@ public class EmployeeController {
 
     private final DateUtil dateUtil;
 
+
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees() {
-        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        return ResponseEntity.ok(employeeService.findAll());
+    public ResponseEntity<Page<Employee>> getEmployees(Pageable pageable) {
+        return ResponseEntity.ok(employeeService.listAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeGetDetailDataModel> findEmployeeById(@PathVariable Long id) {
         return ResponseEntity.ok(new EmployeeGetDetailDataModel(employeeService.findEmployeeById(id)));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity findEmployeeByName(@PathVariable String name) {
-        return ResponseEntity.ok(employeeService.findEmployeeByName(name));
+    public ResponseEntity<EmployeeGetDetailDataModel> findEmployeeByName(@PathVariable String name) {
+        return ResponseEntity.ok(new EmployeeGetDetailDataModel(employeeService.findEmployeeByName(name)));
     }
 
     @GetMapping("/office/{office}")
@@ -60,7 +59,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.listEmployeeByFederativeUnit(federative));
     }
     @GetMapping("/salary_less_than_equal/{salary}")
-    public ResponseEntity<List<Employee>> listEmployeeBySalaryIsLessThanEqual(@PathVariable BigDecimal salary){
+    public ResponseEntity<List<Employee>> listEmployeeBySalaryIsLessThanEqual                   (@PathVariable BigDecimal salary){
         return ResponseEntity.ok(employeeService.listEmployeeBySalaryIsLessThanEqual(salary));
     }
 
@@ -71,18 +70,19 @@ public class EmployeeController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity register(@RequestBody @Valid EmployeePostRegisterDataModel employee, UriComponentsBuilder uriBuilder) {
-        URI uri = uriBuilder.path("/employees/{id}").buildAndExpand(employeeService.register(employee).getId()).toUri();
-        return ResponseEntity.created(uri).build();
+    public ResponseEntity<EmployeePostRegisterDataModel> register(@RequestBody @Valid EmployeePostRegisterDataModel employee) {
+        return ResponseEntity.ok(employee);
     }
 
     @Transactional
     @PutMapping
-    public ResponseEntity updateEmployeeRegister(@RequestBody @Valid EmployeePutUpdateDataModel data) {
+    public ResponseEntity<Void> updateEmployeeRegister(@RequestBody @Valid EmployeePutUpdateDataModel data) {
 
         Employee employee = employeeService.findEmployeeById(data.getId());
 
-        return ResponseEntity.ok(new EmployeeGetDetailDataModel(employee));
+        employee.updateData(data);
+
+        return (ResponseEntity<Void>) ResponseEntity.noContent();
     }
 
     @Transactional
