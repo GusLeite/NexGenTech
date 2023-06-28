@@ -1,5 +1,6 @@
 package br.com.gusleite.NexGenTech.datamodel;
 
+import br.com.gusleite.NexGenTech.entities.Address;
 import br.com.gusleite.NexGenTech.entities.FederativeUnit;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -21,4 +22,13 @@ public class AddressDataModel {
     private FederativeUnit federativeUnit;
     @NotEmpty
     private String cep;
+
+    public AddressDataModel(Address address) {
+        this.street = address.getStreet();
+        this.number = address.getNumber();
+        this.neighborhood = address.getNeighborhood();
+        this.city = address.getCity();
+        this.federativeUnit = address.getFederativeUnit();
+        this.cep = address.getCep();
+    }
 }

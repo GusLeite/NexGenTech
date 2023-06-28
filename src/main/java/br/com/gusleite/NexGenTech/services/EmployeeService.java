@@ -6,6 +6,7 @@ import br.com.gusleite.NexGenTech.entities.Employee;
 import br.com.gusleite.NexGenTech.entities.FederativeUnit;
 import br.com.gusleite.NexGenTech.enums.Office;
 import br.com.gusleite.NexGenTech.exceptions.EmployeeNotFoundException;
+import br.com.gusleite.NexGenTech.mappers.EmployeeMapper;
 import br.com.gusleite.NexGenTech.repositories.EmployeeRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +56,13 @@ public class EmployeeService {
     }
 
     public void delete(long id) {
+
         employeeRepository.deleteById(findEmployeeById(id).getId());
     }
 
     public void updateData(EmployeePutUpdateDataModel data) {
+        Employee savedEmployee = findEmployeeById(data.getId());
+        savedEmployee.updateData(data);
 
     }
 }

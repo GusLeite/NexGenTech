@@ -7,6 +7,17 @@ spring:
     url: jdbc:mysql://localhost:3307/nexgentech?useSSl=false&createDatabaseIfNotExist=true
     username: root
     password: root
+
   jpa:
     hibernate:
       ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+info:
+  app: NexGenTech Aplication by GusLeite
+  github: https://github.com/GusLeite/NexGenTech
+  linkedIn: https://www.linkedin.com/in/gustavo-leite-183b39236/

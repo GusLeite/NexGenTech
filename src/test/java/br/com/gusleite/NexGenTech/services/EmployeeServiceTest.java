@@ -1,12 +1,9 @@
-package br.com.gusleite.NexGenTech.controllers;
+package br.com.gusleite.NexGenTech.services;
 
-import br.com.gusleite.NexGenTech.datamodel.EmployeeGetDetailDataModel;
-import br.com.gusleite.NexGenTech.datamodel.EmployeePostRegisterDataModel;
-import br.com.gusleite.NexGenTech.datamodel.EmployeePutUpdateDataModel;
 import br.com.gusleite.NexGenTech.entities.Employee;
 import br.com.gusleite.NexGenTech.entities.FederativeUnit;
 import br.com.gusleite.NexGenTech.enums.Office;
-import br.com.gusleite.NexGenTech.services.EmployeeService;
+import br.com.gusleite.NexGenTech.repositories.EmployeeRepository;
 import br.com.gusleite.NexGenTech.util.EmployeeCreator;
 import br.com.gusleite.NexGenTech.util.EmployeePostRegisterCreator;
 import br.com.gusleite.NexGenTech.util.EmployeePutUpdateRegisterCreator;
@@ -21,39 +18,40 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-class EmployeeControllerTest {
+class EmployeeServiceTest {
     @InjectMocks
-    private EmployeeController employeeController;
+    private EmployeeService employeeService;
     @Mock
-    private EmployeeService employeeServiceMock;
+    private EmployeeRepository employeeRepositoryMock;
 
     @BeforeEach
     void setUp(){
         PageImpl<Employee> employeesPage = new PageImpl<>(List.of(EmployeeCreator.createEmployeeToBeSaved()));
-        when(employeeServiceMock.listAll(ArgumentMatchers.any()))
+        when(employeeRepositoryMock.findAll(ArgumentMatchers.any(PageRequest.class)))
                 .thenReturn(employeesPage);
 
-        BDDMockito.when(employeeServiceMock.findEmployeeById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(employeeRepositoryMock.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(EmployeeCreator.createEmployeeToBeSaved()));
+
+        BDDMockito.when(employeeRepositoryMock.findEmployeeByName(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.of(EmployeeCreator.createEmployeeToBeSaved()));
+
+
+        BDDMockito.when(employeeRepositoryMock.save(ArgumentMatchers.any(Employee.class)))
                 .thenReturn(EmployeeCreator.createEmployeeToBeSaved());
 
-        BDDMockito.when(employeeServiceMock.findEmployeeByName(ArgumentMatchers.anyString()))
-                .thenReturn(EmployeeCreator.createEmployeeToBeSaved());
+        BDDMockito.doNothing().when(employeeRepositoryMock).delete(ArgumentMatchers.any(Employee.class));
 
-
-        BDDMockito.when(employeeServiceMock.register(ArgumentMatchers.any(EmployeePostRegisterDataModel.class)))
-                .thenReturn(EmployeeCreator.createEmployeeToBeSaved());
-
-        BDDMockito.doNothing().when(employeeServiceMock).updateData(ArgumentMatchers.any(EmployeePutUpdateDataModel.class));
     }
 
     @Test
@@ -61,7 +59,7 @@ class EmployeeControllerTest {
     void listAll_ReturnListOfEmployeesInsidePageObject_WhenSuccessful(){
         String expectedName = EmployeeCreator.createEmployeeToBeSaved().getName();
 
-        Page<Employee> employeePage = employeeController.getEmployees(null).getBody();
+        Page<Employee> employeePage = employeeService.listAll(PageRequest.of(1,1));
 
         Assertions.assertThat(employeePage).isNotNull();
 
@@ -77,7 +75,7 @@ class EmployeeControllerTest {
     void findById_ReturnEmployee_WhenSuccessful(){
         Long expectedId = EmployeeCreator.createEmployeeToBeSaved().getId();
 
-        EmployeeGetDetailDataModel employee = employeeController.findEmployeeById(1L).getBody();
+        Employee employee = employeeService.findEmployeeById(1);
 
         Assertions.assertThat(employee).isNotNull();
 
@@ -89,10 +87,10 @@ class EmployeeControllerTest {
     void findByName_ReturnEmployee_WhenSuccessful(){
         String expectedName = EmployeeCreator.createEmployeeToBeSaved().getName();
 
-        EmployeeGetDetailDataModel employee = employeeController.findEmployeeByName("Gioberto").getBody();
+        Employee employee = employeeService.findEmployeeByName("Gioberto");
 
         Assertions.assertThat(employee)
-                        .isNotNull();
+                .isNotNull();
 
         Assertions.assertThat(employee.getName()).isEqualTo(expectedName);
     }
@@ -102,7 +100,7 @@ class EmployeeControllerTest {
     void listEmployeeByOffice_ReturnListOfEmployees_WhenSuccessful(){
         Office expectedOffice = Office.TRAINEE;
 
-        List<Employee> employees = employeeController.listEmployeeByOffice(Office.TRAINEE).getBody();
+        List<Employee> employees = employeeService.listEmployeeByOffice(Office.TRAINEE);
 
         Assertions.assertThat(employees).isNotNull();
 
@@ -114,7 +112,7 @@ class EmployeeControllerTest {
     void listEmployeeByFederativeUnit_ReturnListOfEmployees_WhenSuccessful(){
         FederativeUnit expectedFederativeUnit= FederativeUnit.SP;
 
-        List<Employee> employees = employeeController.listEmployeeByFederativeUnit(expectedFederativeUnit).getBody();
+        List<Employee> employees = employeeService.listEmployeeByFederativeUnit(expectedFederativeUnit);
 
         Assertions.assertThat(employees).isNotNull();
 
@@ -128,7 +126,7 @@ class EmployeeControllerTest {
     void listEmployeeBySalaryIsLessThanEqual_ReturnListOfEmployees_WhenSuccessful(){
         BigDecimal expectedSalaryIsLessThen = new BigDecimal("2500.0");
 
-        List<Employee> employees = employeeController.listEmployeeBySalaryIsLessThanEqual(expectedSalaryIsLessThen).getBody();
+        List<Employee> employees = employeeService.listEmployeeBySalaryIsLessThanEqual(expectedSalaryIsLessThen);
 
         Assertions.assertThat(employees).isNotNull();
 
@@ -142,7 +140,7 @@ class EmployeeControllerTest {
     void listEmployeeBySalaryIsGreaterThanEqual_ReturnListOfEmployees_WhenSuccessful(){
         BigDecimal expectedSalaryIsGreaterThen = new BigDecimal("2000.0");
 
-        List<Employee> employees = employeeController.listEmployeeBySalaryIsLessThanEqual(expectedSalaryIsGreaterThen).getBody();
+        List<Employee> employees = employeeService.listEmployeeBySalaryIsLessThanEqual(expectedSalaryIsGreaterThen);
 
         Assertions.assertThat(employees).isNotNull();
 
@@ -156,7 +154,7 @@ class EmployeeControllerTest {
 
         Employee employee = EmployeeCreator.createEmployeeToBeSaved();
 
-        employeeController.register(EmployeePostRegisterCreator.createEmployeePostBody());
+        employeeService.register(EmployeePostRegisterCreator.createEmployeePostBody());
 
         Assertions.assertThat(employee).isNotNull();
         Assertions.assertThat(employee.getName()).isEqualTo(EmployeeCreator.createEmployeeToBeSaved().getName());
@@ -165,29 +163,18 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void update_ReturnEmployee_WhenSuccessful(){
+    void update_ReturnEmployee_WhenSuccessful() {
 
-        Assertions.assertThatCode(() -> employeeController.updateEmployeeRegister(EmployeePutUpdateRegisterCreator.createEmployeePostBody()))
+        Assertions.assertThatCode(() -> employeeService.updateData(EmployeePutUpdateRegisterCreator.createEmployeePostBody()))
                 .doesNotThrowAnyException();
-
-        ResponseEntity response = employeeController.updateEmployeeRegister(EmployeePutUpdateRegisterCreator.createEmployeePostBody());
-
-        Assertions.assertThat(response).isNotNull();
-
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
+
 
     @Test
     void delete_Employee_WhenSuccessful() {
 
-        Employee employee = EmployeeCreator.createEmployeeToBeSaved();
+        Assertions.assertThatCode(() -> employeeService.delete(1)).doesNotThrowAnyException();
 
-        employeeServiceMock.register(EmployeePostRegisterCreator.createEmployeePostBody());
-        ResponseEntity response = employeeController.deleteEmployeeRegister(employee.getId());
-
-        Assertions.assertThat(response).isNotNull();
-
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
 }

@@ -1,12 +1,11 @@
 package br.com.gusleite.NexGenTech.datamodel;
+import br.com.gusleite.NexGenTech.entities.Address;
+import br.com.gusleite.NexGenTech.entities.Employee;
 import br.com.gusleite.NexGenTech.enums.Office;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,4 +33,15 @@ public class EmployeePostRegisterDataModel {
     @NotNull
     private LocalDate lastPromotionDate;
 
+    public EmployeePostRegisterDataModel(Employee savedEmployee) {
+        this.name = savedEmployee.getName();
+        this.telephone = savedEmployee.getTelephone();
+        this.cpf = savedEmployee.getCpf();
+        this.email = savedEmployee.getEmail();
+        this.telephone = savedEmployee.getTelephone();
+        this.salary = savedEmployee.getSalary();
+        this.office = savedEmployee.getOffice();
+        this.address = new AddressDataModel(savedEmployee.getAddress());
+        this.lastPromotionDate = savedEmployee.getDateLastPromotion();
+    }
 }

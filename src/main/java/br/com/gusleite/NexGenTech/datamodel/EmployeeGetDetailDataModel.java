@@ -23,6 +23,7 @@ public class EmployeeGetDetailDataModel {
         private Office office;
         private Address address;
         private LocalDate lastPromotionDate;
+        private String email;
 
 
     public EmployeeGetDetailDataModel(Employee employee) {
@@ -34,5 +35,6 @@ public class EmployeeGetDetailDataModel {
         this.office = employee.getOffice();
         this.address = employee.getAddress();
         this.lastPromotionDate = employee.getDateLastPromotion();
+        this.email = employee.getEmail();
     }
 }

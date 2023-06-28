@@ -10,11 +10,14 @@ import br.com.gusleite.NexGenTech.enums.Office;
 import br.com.gusleite.NexGenTech.exceptions.PromotionValidationFailAttemptException;
 import br.com.gusleite.NexGenTech.services.EmployeeService;
 import br.com.gusleite.NexGenTech.util.DateUtil;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -40,26 +43,42 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful Operation"),
+            @ApiResponse(responseCode = "500", description = "When Employee With This Id Does Not Exist in the Database")
+    })
     public ResponseEntity<EmployeeGetDetailDataModel> findEmployeeById(@PathVariable Long id) {
         return ResponseEntity.ok(new EmployeeGetDetailDataModel(employeeService.findEmployeeById(id)));
     }
 
     @GetMapping("/name/{name}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful Operation"),
+            @ApiResponse(responseCode = "500", description = "When Employee With This Name Does Not Exist in the Database")
+    })
     public ResponseEntity<EmployeeGetDetailDataModel> findEmployeeByName(@PathVariable String name) {
         return ResponseEntity.ok(new EmployeeGetDetailDataModel(employeeService.findEmployeeByName(name)));
     }
 
     @GetMapping("/office/{office}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful Operation"),
+            @ApiResponse(responseCode = "500", description = "When Employee With This Office Does Not Exist in the Database")
+    })
     public ResponseEntity<List<Employee>> listEmployeeByOffice(@PathVariable Office office){
         return ResponseEntity.ok(employeeService.listEmployeeByOffice(office));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful Operation"),
+            @ApiResponse(responseCode = "500", description = "When Employee With This Federative Unit Does Not Exist in the Database")
+    })
     @GetMapping("/federative_unit/{federative}")
     public ResponseEntity<List<Employee>>listEmployeeByFederativeUnit(@PathVariable FederativeUnit federative){
         return ResponseEntity.ok(employeeService.listEmployeeByFederativeUnit(federative));
     }
     @GetMapping("/salary_less_than_equal/{salary}")
-    public ResponseEntity<List<Employee>> listEmployeeBySalaryIsLessThanEqual                   (@PathVariable BigDecimal salary){
+    public ResponseEntity<List<Employee>> listEmployeeBySalaryIsLessThanEqual(@PathVariable BigDecimal salary){
         return ResponseEntity.ok(employeeService.listEmployeeBySalaryIsLessThanEqual(salary));
     }
 
@@ -70,23 +89,33 @@ public class EmployeeController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<EmployeePostRegisterDataModel> register(@RequestBody @Valid EmployeePostRegisterDataModel employee) {
-        return ResponseEntity.ok(employee);
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successful Created"),
+            @ApiResponse(responseCode = "400", description = "When Some Paramater Was Incorect")
+    })
+    public ResponseEntity register(@RequestBody @Valid EmployeePostRegisterDataModel employee) {
+            employeeService.register(employee);
+            return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
 
     @Transactional
     @PutMapping
-    public ResponseEntity<Void> updateEmployeeRegister(@RequestBody @Valid EmployeePutUpdateDataModel data) {
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content"),
+    @ApiResponse(responseCode = "404",description = "Not Found a emploee With this id")})
+    public ResponseEntity updateEmployeeRegister(@RequestBody @Valid EmployeePutUpdateDataModel data) {
 
         Employee employee = employeeService.findEmployeeById(data.getId());
 
         employee.updateData(data);
 
-        return (ResponseEntity<Void>) ResponseEntity.noContent();
+        return ResponseEntity.noContent().build();
     }
 
     @Transactional
     @PutMapping("/promote/{id}")
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content"),
+            @ApiResponse(responseCode = "404",description = "Not Found a emploee With this id")})
     public ResponseEntity promoteEmployee(@PathVariable Long id) throws PromotionValidationFailAttemptException {
         Employee employee = employeeService.findEmployeeById(id);
         employee.promote();
@@ -98,6 +127,8 @@ public class EmployeeController {
 
     @Transactional
     @DeleteMapping("/{id}")
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content"),
+            @ApiResponse(responseCode = "404",description = "Not Found a emploee With this id")})
     public ResponseEntity deleteEmployeeRegister(@PathVariable long id) {
         employeeService.delete(id);
         return ResponseEntity.noContent().build();
