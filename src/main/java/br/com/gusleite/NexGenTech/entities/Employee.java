@@ -1,10 +1,8 @@
 package br.com.gusleite.NexGenTech.entities;
-
-import br.com.gusleite.NexGenTech.datamodel.EmployeePostRegisterDataModel;
-import br.com.gusleite.NexGenTech.datamodel.EmployeePutUpdateDataModel;
 import br.com.gusleite.NexGenTech.enums.Office;
 import br.com.gusleite.NexGenTech.exceptions.PromotionValidationFailAttemptException;
 import br.com.gusleite.NexGenTech.services.ValidatePromotionService;
+import br.com.gusleite.NexGenTech.vo.v1.EmployeeVO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,32 +32,21 @@ public class Employee {
     private Address address;
     private LocalDate dateLastPromotion;
 
-    public Employee(EmployeePostRegisterDataModel data){
-        this.name = data.getName();
-        this.cpf = data.getCpf();
-        this.email = data.getEmail();
-        this.telephone = data.getTelephone();
-        this.salary = data.getSalary();
-        this.office = data.getOffice();
-        this.address = new Address(data.getAddress());
-        this.dateLastPromotion = data.getLastPromotionDate();
-    }
-
     public void promote() throws PromotionValidationFailAttemptException {
         new ValidatePromotionService().validate(this);
         this.office = this.office.NextOffice();
         this.dateLastPromotion = LocalDate.now();
     }
 
-    public void updateData(EmployeePutUpdateDataModel data) {
+    public void updateData(EmployeeVO data) {
         if(data.getName() != null) {
             this.name = data.getName();
         }
         if(data.getTelephone() != null) {
             this.telephone = data.getTelephone();
         }
-        if(data.getAddressDataModel() != null) {
-            address.updateAddress(data.getAddressDataModel());
+        if(data.getAddress() != null) {
+            address.updateAddress(data.getAddress());
         }
         if(data.getName() != null) {
             this.name = data.getName();

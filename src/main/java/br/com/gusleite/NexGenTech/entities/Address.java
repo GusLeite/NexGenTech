@@ -1,6 +1,5 @@
 package br.com.gusleite.NexGenTech.entities;
 
-import br.com.gusleite.NexGenTech.datamodel.AddressDataModel;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,18 +20,7 @@ public class Address {
     private FederativeUnit federativeUnit;
     private String cep;
 
-
-    public Address(AddressDataModel address) {
-        this.cep = address.getCep();
-        this.city = address.getCity();
-        this.federativeUnit = address.getFederativeUnit();
-        this.number = address.getNumber();
-        this.neighborhood = address.getNeighborhood();
-        this.street = address.getStreet();
-    }
-
-
-    public void updateAddress(AddressDataModel data) {
+    public void updateAddress(Address data) {
         if(data.getCep() != null){
             this.cep = data.getCep();
         }
