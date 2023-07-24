@@ -6,18 +6,29 @@ import br.com.gusleite.NexGenTech.mapper.NexGenMapper;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeVO {
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String cpf;
+    @NotBlank
     private String email;
+    @NotBlank
     private String telephone;
+    @NotNull
     private BigDecimal salary;
     @Enumerated(EnumType.STRING)
     private Office office;
@@ -26,6 +37,7 @@ public class EmployeeVO {
     private LocalDate dateLastPromotion;
 
     public EmployeeVO(EmployeeVO data){
+        this.id = data.getId();
         this.name = data.getName();
         this.cpf = data.getCpf();
         this.email = data.getEmail();

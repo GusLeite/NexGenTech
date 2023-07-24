@@ -1,4 +1,5 @@
 package br.com.gusleite.NexGenTech.services;
+
 import br.com.gusleite.NexGenTech.entities.Employee;
 import br.com.gusleite.NexGenTech.entities.FederativeUnit;
 import br.com.gusleite.NexGenTech.enums.Office;
@@ -10,7 +11,6 @@ import br.com.gusleite.NexGenTech.vo.v1.EmployeeVO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,10 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     public EmployeeVO findEmployeeVOById(long id){
-        return NexGenMapper.parseObject(employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("EmployeeVO Not Found!")),EmployeeVO.class);
+        return NexGenMapper.parseObject(employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee with this id Not Found!")),EmployeeVO.class);
+    }
+    public Employee findEmployeeById(long id){
+        return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee with this id Not Found!"));
     }
 
     public EmployeeVO findEmployeeByName(String name){
@@ -46,17 +49,14 @@ public class EmployeeService {
         return NexGenMapper.parseListObjects(employeeRepository.findEmployeeBySalaryIsGreaterThanEqual(salary),EmployeeVO.class);
     }
 
-    public Page<EmployeeVO> listAll(Pageable pageable) {
-        Page<Employee> employeePage = employeeRepository.findAll(pageable);
-        List<EmployeeVO> employeeVOList = NexGenMapper.parseListObjects(employeePage.getContent(), EmployeeVO.class);
-
-        return new PageImpl<>(employeeVOList);
+    public List<EmployeeVO> listAll() {
+        return NexGenMapper.parseListObjects(employeeRepository.findAll(),EmployeeVO.class);
     }
 
     public EmployeeVO register(@Valid EmployeeVO data) {
         Employee employee = NexGenMapper.parseObject(data,Employee.class);
-        EmployeeVO employeeVO = NexGenMapper.parseObject(employeeRepository.save(employee),EmployeeVO.class);
-        return employeeVO;
+        employeeRepository.save(employee);
+        return NexGenMapper.parseObject(employee,EmployeeVO.class);
     }
 
     public void delete(long id) {
@@ -64,12 +64,12 @@ public class EmployeeService {
     }
 
     public void updateData(EmployeeVO data) {
-        Employee savedEmployee = NexGenMapper.parseObject(findEmployeeVOById(data.getId()),Employee.class);
+        Employee savedEmployee = findEmployeeById(data.getId());
         savedEmployee.updateData(data);
     }
 
     public void promote(Long id) throws PromotionValidationFailAttemptException {
-        Employee entity = NexGenMapper.parseObject(findEmployeeVOById(id),Employee.class);
+        Employee entity = findEmployeeById(id);
         entity.promote();
     }
 }

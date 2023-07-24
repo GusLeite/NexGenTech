@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/EmployeeVos")
+@RequestMapping(value = "/employee")
 @RequiredArgsConstructor
 @Log4j2
 public class EmployeeController {
@@ -31,8 +29,8 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<Page<EmployeeVO>> getEmployeeVos(Pageable pageable) {
-        return ResponseEntity.ok(employeeService.listAll(pageable));
+    public ResponseEntity<List<EmployeeVO>> findAll() {
+        return ResponseEntity.ok(employeeService.listAll());
     }
 
     @GetMapping("/{id}")
@@ -87,7 +85,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "When Some Paramater Was Incorect")
     })
     public ResponseEntity register(@RequestBody @Valid EmployeeVO employeeVo) {
-            employeeService.register(employeeVo);
+            log.info(employeeService.register(employeeVo));
             return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -96,8 +94,7 @@ public class EmployeeController {
     @PutMapping
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content"),
     @ApiResponse(responseCode = "404",description = "Not Found a emploee With this id")})
-    public ResponseEntity updateEmployeeVoRegister(@RequestBody @Valid EmployeeVO data) {
-
+    public ResponseEntity updateEmployeeRegister(@RequestBody @Valid EmployeeVO data) {
         employeeService.updateData(data);
 
         return ResponseEntity.noContent().build();
@@ -109,7 +106,6 @@ public class EmployeeController {
             @ApiResponse(responseCode = "404",description = "Not Found a emploee With this id")})
     public ResponseEntity promoteEmployeeVo(@PathVariable Long id) throws PromotionValidationFailAttemptException {
        employeeService.promote(id);
-
        return ResponseEntity.ok(employeeService.findEmployeeVOById(id));
     }
 
