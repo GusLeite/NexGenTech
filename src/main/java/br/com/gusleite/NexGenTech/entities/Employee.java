@@ -3,6 +3,7 @@ import br.com.gusleite.NexGenTech.enums.Office;
 import br.com.gusleite.NexGenTech.exceptions.PromotionValidationFailAttemptException;
 import br.com.gusleite.NexGenTech.services.ValidatePromotionService;
 import br.com.gusleite.NexGenTech.vo.v1.EmployeeVO;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

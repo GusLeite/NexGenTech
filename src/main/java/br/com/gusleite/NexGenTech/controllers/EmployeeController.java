@@ -5,6 +5,7 @@ import br.com.gusleite.NexGenTech.entities.FederativeUnit;
 import br.com.gusleite.NexGenTech.enums.Office;
 import br.com.gusleite.NexGenTech.exceptions.PromotionValidationFailAttemptException;
 import br.com.gusleite.NexGenTech.services.EmployeeService;
+import br.com.gusleite.NexGenTech.util.MediaType;
 import br.com.gusleite.NexGenTech.vo.v1.EmployeeVO;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -33,7 +34,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.listAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}",produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YAML})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful Operation"),
             @ApiResponse(responseCode = "500", description = "When EmployeeVo With This Id Does Not Exist in the Database")
@@ -42,7 +43,7 @@ public class EmployeeController {
         return ResponseEntity.ok(new EmployeeVO(employeeService.findEmployeeVOById(id)));
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping(value = "/name/{name}",produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YAML})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful Operation"),
             @ApiResponse(responseCode = "500", description = "When EmployeeVo With This Name Does Not Exist in the Database")
@@ -51,7 +52,7 @@ public class EmployeeController {
         return ResponseEntity.ok(new EmployeeVO(employeeService.findEmployeeByName(name)));
     }
 
-    @GetMapping("/office/{office}")
+    @GetMapping(value = "/office/{office}",produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YAML})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful Operation"),
             @ApiResponse(responseCode = "500", description = "When EmployeeVo With This Office Does Not Exist in the Database")
@@ -64,16 +65,16 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "Successful Operation"),
             @ApiResponse(responseCode = "500", description = "When EmployeeVo With This Federative Unit Does Not Exist in the Database")
     })
-    @GetMapping("/federative_unit/{federative}")
+    @GetMapping(value = "/federative_unit/{federative}",produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YAML})
     public ResponseEntity<List<EmployeeVO>>listEmployeeVoByFederativeUnit(@PathVariable FederativeUnit federative){
         return ResponseEntity.ok(employeeService.listEmployeeByFederativeUnit(federative));
     }
-    @GetMapping("/salary_less_than_equal/{salary}")
+    @GetMapping(value = "/salary_less_than_equal/{salary}",produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YAML})
     public ResponseEntity<List<EmployeeVO>> listEmployeeBySalaryIsLessThanEqual(@PathVariable BigDecimal salary){
         return ResponseEntity.ok(employeeService.listEmployeeBySalaryIsLessThanEqual(salary));
     }
 
-    @GetMapping("/salary_greater_than_equal/{salary}")
+    @GetMapping(value = "/salary_greater_than_equal/{salary}",produces = { MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_YAML})
     public ResponseEntity<List<EmployeeVO>> listEmployeeBySalaryIsGreaterThanEqual(@PathVariable BigDecimal salary){
         return ResponseEntity.ok(employeeService.listEmployeeBySalaryIsGreaterThanEqual(salary));
     }

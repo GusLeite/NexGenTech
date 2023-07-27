@@ -3,6 +3,8 @@ package br.com.gusleite.NexGenTech.vo.v1;
 import br.com.gusleite.NexGenTech.entities.Address;
 import br.com.gusleite.NexGenTech.enums.Office;
 import br.com.gusleite.NexGenTech.mapper.NexGenMapper;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonPropertyOrder({"id","name","salary","office","email","cpf","address","dateLastPromotion"})
 public class EmployeeVO {
     private Long id;
     @NotBlank
@@ -34,6 +37,7 @@ public class EmployeeVO {
     private Office office;
     @Embedded
     private Address address;
+    @JsonProperty("date_last_promotion")
     private LocalDate dateLastPromotion;
 
     public EmployeeVO(EmployeeVO data){
